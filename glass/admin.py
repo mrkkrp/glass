@@ -18,3 +18,10 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
+from glass.models   import Tag, Topic, Message
+
+admin.site.register(Tag)
+admin.site.register(Topic)
+admin.site.register(Message)
+
+admin.site.site_header = 'Глас Admin'
