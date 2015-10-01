@@ -21,5 +21,13 @@ from django.conf.urls import patterns, url
 from glass import views
 
 urlpatterns = [
-    url('^$', views.index, name='index'),
+    url('^$',                            views.index,     name='index'),
+    url('^topic/(?P<slug>[\w\-]+)/$',    views.topic,     name='topic'),
+    url('^new-topic/$',                  views.new_topic, name='new-topic'),
+    url('^get-topic/$',                  views.get_topic, name='get-topic'),
+    url('^user/(?P<username>[\w\-]+)/$', views.user,      name='user'),
+    url('^msg-post/$',                   views.msg_post,  name='msg-post'),
+    url('^msg-like/$',                   views.msg_like,  name='msg-like'),
+    url('^msg-edit/$',                   views.msg_edit,  name='msg-edit'),
+    url('^msg-del/$',                    views.msg_del,   name='msg-del'),
 ]

@@ -50,8 +50,8 @@ class GlassRegView(RegistrationView):
 
 urlpatterns = [
     url(r'^admin/',    include(admin.site.urls)),
-    url(r'^$',         include(glass.urls)),
     url(r'^accounts/register/$', GlassRegView.as_view(), name='register'),
     url(r'^accounts/', include(registration.backends.simple.urls)),
-    url('^markdown/',  include(django_markdown.urls)),
+    url(r'^markdown/', include(django_markdown.urls)),
+    url(r'^',          include(glass.urls)),
 ]
