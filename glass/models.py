@@ -17,4 +17,35 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from django.db import models
+from django.db                  import models
+from django.contrib.auth.models import User
+from django_markdown.models     import MarkdownField
+
+class Tag(models.Model):
+    name = models.CharField(max_length=16, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+class Topic(models.Model):
+    title = models.CharField(max_length=128)
+    slug  = models.SlugField(unique=True)
+    tags  = models.ManyToManyField(Tag)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        models.Model.save(self, *args, **kwargs)
+
+    def __str__(self):
+        return self.slug
+
+class Message(models.Model):
+    author   = models.ForeignKey(User)
+    topic    = models.ForeignKey(Topic)
+    content  = MarkdownField()
+    created  = models.DateField(auto_now_add=True)
+    modified = models.DateField(auto_now=True)
+    likers   = models.ManyToManyField(User, related_name='liked')
+
+    def __str__(self):
+        return str(self.id) + ' by ' + self.author.username
