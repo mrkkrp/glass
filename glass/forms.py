@@ -17,4 +17,10 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from django import forms
+from django.forms.models        import modelform_factory
+from django.contrib.auth.models import User
+from glass.models               import Topic, Message
+
+UserForm  = modelform_factory(User,    exclude=['username'])
+TopicForm = modelform_factory(Topic,   fields=['title', 'tags'])
+ModelForm = modelform_factory(Message, fields=['content'])
