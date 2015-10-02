@@ -1,0 +1,121 @@
+{% load kwacros %}
+
+{% kwacro title %}
+{% block title %}Missing title{% endblock title %}
+{% endkwacro title %}
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'icons/favicon.ico' %}">
+    <title>Глас | {% usekwacro title %}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css'     %}" rel="stylesheet">
+  </head>
+  <body style="padding-top: 40px;">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed"
+                  data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">
+            <strong>Глас</strong>
+          </a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            {% block new_topic %}
+            <li>
+              <a href="{% url 'new_topic' %}">
+                <span class="glyphicon glyphicon-plus" title="New topic">
+                </span>
+              </a>
+            </li>
+            {% endblock new_topic %}
+            {% block extra_actions %}
+            {# No extra actions on this page. #}
+            {% endblock extra_actions %}
+            <li>
+              <a href="" id="dropdownMenu1" data-toggle="dropdown"
+                 title="You are {{ user.username }}">
+                {{ user.username }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li>
+                  <a href="{% url 'user' user.username %}">
+                    My Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'auth_password_change' %}">
+                    Change Password
+                  </a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="{% url 'auth_logout' %}?next={% url 'index' %}">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            {% block register %}
+            <li>
+              <a href="{% url 'register' %}">
+                <span class="glyphicon glyphicon-user" title="Register">
+                </span>
+              </a>
+            </li>
+            {% endblock register %}
+            {% endif %}
+            {% block about %}
+            <li>
+              <a href="{% url 'about' %}">
+                <span class="glyphicon glyphicon-question-sign"
+                      title="About">
+                </span>
+              </a>
+            </li>
+            {% endblock about %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
+          <div class="page-header">
+            <h1>
+              {% usekwacro title %}
+              {% block title_stuff %}
+              {% endblock title_stuff %}
+            </h1>
+          </div>
+          {% block content %}
+          <em>Missing content</em>
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static 'js/glass-ajax.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>
