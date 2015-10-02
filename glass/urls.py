@@ -22,6 +22,7 @@ from glass import views
 
 urlpatterns = [
     url('^$',                            views.index,     name='index'),
+    url('^about/$',                      views.about,     name='about'),
     url('^topic/(?P<slug>[\w\-]+)/$',    views.topic,     name='topic'),
     url('^new-topic/$',                  views.new_topic, name='new-topic'),
     url('^get-topic/$',                  views.get_topic, name='get-topic'),

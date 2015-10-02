@@ -32,6 +32,12 @@ def index(request):
     """
     return HttpResponse("index")
 
+def about(request):
+    """
+    About page, nothing special.
+    """
+    return render(request, 'glass/about.html')
+
 def topic(request, slug):
     """
     Topic-dedicated page.
