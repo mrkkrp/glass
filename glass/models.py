@@ -32,6 +32,13 @@ class Topic(models.Model):
     slug  = models.SlugField(unique=True)
     tags  = models.ManyToManyField(Tag)
 
+    def likes(self):
+        """
+        Return number of people who like this topic. This is currently equal to
+        number of people who like its introductory message.
+        """
+        return Message.objects.filter(topic=self)[0].likes()
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         models.Model.save(self, *args, **kwargs)
@@ -47,5 +54,14 @@ class Message(models.Model):
     modified = models.DateField(auto_now=True)
     likers   = models.ManyToManyField(User, related_name='liked')
 
+    def likes(self):
+        """
+        How many people like this message?
+        """
+        return self.likers.count()
+
     def __str__(self):
         return str(self.id) + ' by ' + self.author.username
+
+    class Meta:
+        ordering = ['created']
