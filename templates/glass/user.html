@@ -1,0 +1,77 @@
+{% extends 'glass/base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}
+{{ this_user.username }}
+{% endblock title %}
+
+{% block title_stuff %}
+{% if this_user.is_superuser %}
+<span class="badge" id="admin_badge">admin</span>
+{% else %}
+{% if this_user.is_stuff %}
+<span class="badge" id="staff_badge">staff</span>
+{% endif %}
+{% endif %}
+
+{% endblock title_stuff %}
+
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">Profile</div>
+  <table class="table">
+    <tr><td>Username</td><td>{{ this_user.username }}</td></tr>
+    {% if this_user.first_name %}
+    <tr><td>First name</td><td>{{ this_user.first_name }}</td></tr>
+    {% endif %}
+    {% if this_user.last_name %}
+    <tr><td>Last name</td><td>{{ this_user.last_name }}</td></tr>
+    {% endif %}
+    {% if this_user.email %}
+    <tr><td>Email</td><td>{{ this_user.email }}</td></tr>
+    {% endif %}
+    <tr><td>Active</td><td>{{ this_user.is_active|yesno }}</td></tr>
+    <tr><td>Joined</td><td>{{ this_user.date_joined|naturalday }}</td></tr>
+    <tr><td>Last login</td><td>{{ this_user.last_login|naturalday }}</td></tr>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <table class="table">
+    <div class="panel-heading">Latest messages</div>
+    {% for message in latest_msgs %}
+    <tr>
+      <td>#{{ message.id }} in {{ message.topic }}</td>
+      <td><span class="badge">{{ message.likes }}</span></td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td>
+        {% if this_user == user %}
+        You haven't posted anything yet.
+        {% else %}
+        This user hasn't posted anything yet.
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% if form %}
+<div class="well col-md-6 col-md-offset-2">
+  <form role="form" method="post" action=".">
+    {% csrf_token %}
+
+    {% include 'generic-fields.html' %}
+
+    <button class="btn btn-lg btn-primary btn-block"
+            type="submit" value="Submit">
+      Save changes
+    </button>
+  </form>
+</div>
+{% endif %}
+
+{% endblock content %}

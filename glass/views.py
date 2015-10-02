@@ -19,8 +19,11 @@
 
 from django.contrib.auth.decorators import login_required
 from django.http                    import HttpResponse
-from django.shortcuts               import render
+from django.shortcuts               import render, redirect, get_object_or_404
 from django.views.decorators.http   import require_GET, require_POST
+
+from glass.forms  import UserForm, TopicForm, MessageForm
+from glass.models import User, Tag, Topic, Message
 
 def index(request):
     """
@@ -72,7 +75,22 @@ def get_topic(request):
 
 @login_required
 def user(request, username):
-    return HttpResponse("user")
+    """
+    User profile.
+
+    Every registered user can see all profiles, but only his own profile is
+    editable for him. This page also displays latest messages authored by
+    the user.
+    """
+    user = get_object_or_404(User, username=username)
+    latest_msgs = Message.objects.order_by('-created')[:5]
+    context = {'this_user': user, 'latest_msgs': latest_msgs}
+    if request.user == user:
+        if request.method == 'GET':
+            context['form'] = UserForm(instance=user)
+        if request.method == 'POST':
+            UserForm(request.POST, instance=user).save()
+    return render(request, 'glass/user.html', context=context)
 
 @require_POST
 def msg_post(request):

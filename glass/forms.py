@@ -21,6 +21,6 @@ from django.forms.models        import modelform_factory
 from django.contrib.auth.models import User
 from glass.models               import Topic, Message
 
-UserForm  = modelform_factory(User,    exclude=['username','password'])
-TopicForm = modelform_factory(Topic,   fields=['title', 'tags'])
-ModelForm = modelform_factory(Message, fields=['content'])
+UserForm = modelform_factory(User, fields=['first_name','last_name','email'])
+TopicForm = modelform_factory(Topic, fields=['title', 'tags'])
+MessageForm = modelform_factory(Message, fields=['content'])
