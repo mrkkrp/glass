@@ -130,7 +130,7 @@ STATICFILES_DIRS = [
 REGISTRATION_OPEN = True       # If True, users can register.
 ACOUNT_ACTIVATION_DAYS = 7     # One week activation window.
 REGISTRATION_AUTO_LOGIN = True # User will be automatically logged in.
-LOGIN_REDIRECT_URL = ''        # The page to arrive after login.
+LOGIN_REDIRECT_URL = 'index'   # The page to arrive after login.
 LOGIN_URL = '/accounts/login/' # Login page.
 
 # Sites
