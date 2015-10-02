@@ -38,7 +38,7 @@
             {% if user.is_authenticated %}
             {% block new_topic %}
             <li>
-              <a href="{% url 'new_topic' %}">
+              <a href="{% url 'new-topic' %}">
                 <span class="glyphicon glyphicon-plus" title="New topic">
                 </span>
               </a>
@@ -49,7 +49,7 @@
             {% endblock extra_actions %}
             <li>
               <a href="" id="dropdownMenu1" data-toggle="dropdown"
-                 title="You are {{ user.username }}">
+                 title="Logged in as {{ user.username }}">
                 {{ user.username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -80,6 +80,11 @@
               </a>
             </li>
             {% endblock register %}
+            <li><a href="{% url 'auth_login' %}">
+                <span class="glyphicon glyphicon-off" title="Login">
+                </span>
+              </a>
+            </li>
             {% endif %}
             {% block about %}
             <li>

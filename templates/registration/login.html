@@ -1,0 +1,22 @@
+{% extends 'glass/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Login
+{% endblock title %}
+
+{% block content %}
+
+<div class="col-md-6 col-md-offset-2">
+  <form role="form" method="post" action=".">
+    {% csrf_token %}
+
+    {% include 'generic-fields.html' %}
+
+    <button class="btn btn-lg btn-primary btn-block"
+            type="submit" value="Submit">
+      Login
+    </button>
+  </form>
+</div>
+
+{% endblock content %}
