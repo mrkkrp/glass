@@ -61,7 +61,24 @@ def new_topic(request):
     This is mainly about processing of ‘TopicForm’ and ‘MessageForm’, since
     every topic must have initial message.
     """
-    return HttpResponse("new topic")
+    if request.method == 'GET':
+        context = {'form':     TopicForm(prefix='topic_'),
+                   'msg_form': MessageForm(prefix='msg_')}
+    elif request.method == 'POST':
+        topic_form = TopicForm(request.POST, prefix='topic_')
+        msg_form = MessageForm(request.POST, prefix='msg_')
+        context = {'form':     topic_form,
+                   'msg_form': msg_form}
+        if topic_form.is_valid():
+            new_topic = topic_form.save()
+            if msg_form.is_valid():
+                new_msg = msg_form.save(commit=False)
+                new_msg.author = request.user
+                new_msg.topic  = new_topic
+                new_msg.save()
+                msg_form.save_m2m()
+                return redirect('topic', slug=new_topic.slug)
+    return render(request, 'glass/new-topic.html', context=context)
 
 @require_GET
 def get_topic(request):
