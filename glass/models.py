@@ -17,9 +17,10 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from django.db                  import models
-from django.contrib.auth.models import User
-from django_markdown.models     import MarkdownField
+from django.db                      import models
+from django.contrib.auth.models     import User
+from django.template.defaultfilters import slugify
+from django_markdown.models         import MarkdownField
 
 class Tag(models.Model):
     name = models.CharField(max_length=16, primary_key=True)
@@ -40,7 +41,7 @@ class Topic(models.Model):
         return Message.objects.filter(topic=self)[0].likes()
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         models.Model.save(self, *args, **kwargs)
 
     def __str__(self):
