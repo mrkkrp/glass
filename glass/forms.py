@@ -29,8 +29,8 @@ MessageForm = modelform_factory(Message, fields=['content'])
 class TopicForm(ModelForm):
 
     def clean_title(self):
-        data = slugify(self.cleaned_data['title'])
-        if Topic.objects.filter(slug=data):
+        data = self.cleaned_data['title']
+        if Topic.objects.filter(slug=slugify(data)):
             raise ValidationError('Such (or similar) topic already exists!')
         return data
 
