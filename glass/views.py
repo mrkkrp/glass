@@ -88,8 +88,12 @@ def user(request, username):
     if request.user == user:
         if request.method == 'GET':
             context['form'] = UserForm(instance=user)
-        if request.method == 'POST':
-            UserForm(request.POST, instance=user).save()
+        elif request.method == 'POST':
+            form = UserForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+            else: # if form is invalid, render it to show messages
+                context['form'] = form
     return render(request, 'glass/user.html', context=context)
 
 @require_POST
