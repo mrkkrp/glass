@@ -20,7 +20,6 @@
 from django.db                      import models
 from django.contrib.auth.models     import User
 from django.template.defaultfilters import slugify
-from django_markdown.models         import MarkdownField
 
 class Tag(models.Model):
     name = models.CharField(max_length=16, primary_key=True)
@@ -50,7 +49,7 @@ class Topic(models.Model):
 class Message(models.Model):
     author   = models.ForeignKey(User)
     topic    = models.ForeignKey(Topic)
-    content  = MarkdownField()
+    content  = models.TextField()
     created  = models.DateField(auto_now_add=True)
     modified = models.DateField(auto_now=True)
     likers   = models.ManyToManyField(User, related_name='liked')

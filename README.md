@@ -54,7 +54,7 @@ There should be `requirements.txt` for your convenience, by the way.
 
 * Django Registration Redux 1.2
 
-* Django Markdown 0.8.4
+* Markdown 2.6.2
 
 ## License
 

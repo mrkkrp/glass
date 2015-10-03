@@ -17,12 +17,11 @@
 # You should have received a copy of the GNU General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib        import admin
-from django_markdown.admin import MarkdownModelAdmin
-from glass.models          import Tag, Topic, Message
+from django.contrib import admin
+from glass.models   import Tag, Topic, Message
 
 admin.site.register(Tag)
 admin.site.register(Topic)
-admin.site.register(Message, MarkdownModelAdmin)
+admin.site.register(Message)
 
 admin.site.site_header = 'Глас Admin'

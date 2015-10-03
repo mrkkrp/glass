@@ -40,7 +40,6 @@ from django.views             import static
 
 from registration.backends.simple.views import RegistrationView
 import registration.backends.simple.urls
-import django_markdown.urls
 
 import glass.urls
 
@@ -52,6 +51,5 @@ urlpatterns = [
     url(r'^admin/',    include(admin.site.urls)),
     url(r'^accounts/register/$', GlassRegView.as_view(), name='register'),
     url(r'^accounts/', include(registration.backends.simple.urls)),
-    url(r'^markdown/', include(django_markdown.urls)),
     url(r'^',          include(glass.urls)),
 ]

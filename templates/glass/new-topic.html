@@ -1,6 +1,5 @@
 {% extends 'glass/base.html' %}
 {% load staticfiles %}
-{% load django_markdown %}
 {% block title %}
 New topic
 {% endblock title %}
@@ -13,17 +12,7 @@ New topic
 
     {% include 'generic-fields.html' %}
 
-    {{ msg_form.media }}
     {{ msg_form.as_p }}
-
-    {% comment %}
-    <textarea name="test" id="new"></textarea>
-    {% markdown_editor "#new" %}
-    {% markdown_media %}
-
-    {% markdown_editor msg_form.content.auto_id %}
-    {% markdown_media %}
-    {% endcomment %}
 
     <button class="btn btn-lg btn-primary btn-block"
             type="submit" value="Submit">
