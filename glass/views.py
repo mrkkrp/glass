@@ -33,7 +33,7 @@ def index(request):
     “likes”. Main feature on the page is “live” search that has a number of
     parameters, and uses AJAX.
     """
-    return HttpResponse("index")
+    return render(request, 'glass/index.html')
 
 def about(request):
     """
