@@ -100,7 +100,7 @@ def user(request, username):
     the user.
     """
     user = get_object_or_404(User, username=username)
-    latest_msgs = Message.objects.order_by('-created')[:5]
+    latest_msgs = Message.objects.filter(author=user).order_by('-created')[:5]
     context = {'this_user': user, 'latest_msgs': latest_msgs}
     if request.user == user:
         if request.method == 'GET':

@@ -40,9 +40,21 @@
 <div class="panel panel-info">
   <table class="table">
     <div class="panel-heading">Latest messages</div>
+    {% if latest_msgs %}
+    <tr>
+      <th>Message</th>
+      <th>Topic</th>
+      <th>Likes</th>
+    </tr>
+    {% endif %}
     {% for message in latest_msgs %}
     <tr>
-      <td>#{{ message.id }} in {{ message.topic }}</td>
+      <td>{{ message.content|truncatewords:5 }}</td>
+      <td>
+        <a href="{% url 'topic' message.topic.slug %}">
+          {{ message.topic.title }}
+        </a>
+      </td>
       <td><span class="badge">{{ message.likes }}</span></td>
     </tr>
     {% empty %}
