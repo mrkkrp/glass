@@ -26,6 +26,10 @@ register = template.Library()
 def generic_fields(form):
     return {'form': form}
 
+@register.filter(name='css_class')
+def css_class(field, cls):
+    return field.as_widget(attrs={"class":cls})
+
 @register.filter(name='markdown')
 def render_markdown(value):
     return markdown.markdown(value)
