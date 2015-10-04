@@ -62,13 +62,13 @@ def new_topic(request):
     every topic must have initial message.
     """
     if request.method == 'GET':
-        context = {'form':     TopicForm(prefix='topic_'),
-                   'msg_form': MessageForm(prefix='msg_')}
+        context = {'topic_form': TopicForm(prefix='topic_'),
+                   'msg_form':   MessageForm(prefix='msg_')}
     elif request.method == 'POST':
         topic_form = TopicForm(request.POST, prefix='topic_')
         msg_form = MessageForm(request.POST, prefix='msg_')
-        context = {'form':     topic_form,
-                   'msg_form': msg_form}
+        context = {'topic_form': topic_form,
+                   'msg_form':   msg_form}
         if topic_form.is_valid():
             new_topic = topic_form.save()
             if msg_form.is_valid():

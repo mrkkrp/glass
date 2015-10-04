@@ -1,6 +1,7 @@
 {% extends 'glass/base.html' %}
 {% load staticfiles %}
 {% load humanize %}
+{% load glass_extras %}
 {% block title %}
 {{ this_user.username }}
 {% endblock title %}
@@ -72,11 +73,11 @@
 </div>
 
 {% if form %}
-<div class="well col-md-6 col-md-offset-2">
+<div class="col-md-6 col-md-offset-2">
   <form role="form" method="post" action=".">
     {% csrf_token %}
 
-    {% include 'generic-fields.html' %}
+    {% generic_fields form %}
 
     <button class="btn btn-lg btn-primary btn-block"
             type="submit" value="Submit">

@@ -1,24 +1,21 @@
 {% extends 'glass/base.html' %}
 {% load staticfiles %}
+{% load glass_extras %}
+
 {% block title %}
 New topic
 {% endblock title %}
 
 {% block content %}
-
 <div class="col-md-6 col-md-offset-2">
   <form role="form" method="post" action=".">
     {% csrf_token %}
-
-    {% include 'generic-fields.html' %}
-
-    {{ msg_form.as_p }}
-
+    {% generic_fields topic_form %}
+    {% generic_fields msg_form %}
     <button class="btn btn-lg btn-primary btn-block"
             type="submit" value="Submit">
       Submit
     </button>
   </form>
 </div>
-
 {% endblock content %}

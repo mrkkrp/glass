@@ -22,6 +22,10 @@ import markdown
 
 register = template.Library()
 
+@register.inclusion_tag('generic-fields.html')
+def generic_fields(form):
+    return {'form': form}
+
 @register.filter(name='markdown')
 def render_markdown(value):
     return markdown.markdown(value)
