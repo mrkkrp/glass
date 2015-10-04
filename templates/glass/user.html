@@ -73,18 +73,11 @@
 </div>
 
 {% if form %}
-<div class="col-md-6 col-md-offset-2">
-  <form role="form" method="post" action=".">
-    {% csrf_token %}
-
-    {% generic_fields form %}
-
-    <button class="btn btn-lg btn-primary btn-block"
-            type="submit" value="Submit">
-      Save changes
-    </button>
-  </form>
-</div>
+{% form %}
+{% csrf_token %}
+{% generic_fields form %}
+{% generic_button 'Save changes' %}
+{% endform %}
 {% endif %}
 
 {% endblock content %}

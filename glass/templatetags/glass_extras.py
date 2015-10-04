@@ -22,9 +22,21 @@ import markdown
 
 register = template.Library()
 
+@register.inclusion_tag('form.html')
+def form():
+    return {}
+
+@register.inclusion_tag('endform.html')
+def endform():
+    return {}
+
 @register.inclusion_tag('generic-fields.html')
 def generic_fields(form):
     return {'form': form}
+
+@register.inclusion_tag('generic-button.html')
+def generic_button(caption):
+    return {'caption': caption}
 
 @register.filter(name='css_class')
 def css_class(field, cls):
