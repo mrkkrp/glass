@@ -49,7 +49,7 @@ class Topic(models.Model):
 class Message(models.Model):
     author   = models.ForeignKey(User)
     topic    = models.ForeignKey(Topic)
-    content  = models.TextField()
+    content  = models.TextField("Your message")
     created  = models.DateField(auto_now_add=True)
     modified = models.DateField(auto_now=True)
     likers   = models.ManyToManyField(User, related_name='liked')
