@@ -13,6 +13,39 @@ mean, however, that this is a primitive toy project. This one was approached
 seriously and with certain enthusiasm, so I guess doesn't suck too badly in
 what it tries to achieve.
 
+## Quick start
+
+To test the project, just install dependencies (you may want to do it inside
+of some kind of virtual environment, but I don't cover it here):
+
+```
+# pip install -r requirements.txt
+```
+
+Then create migrations and migrate (you need to be in project's directory):
+
+```
+$ python manage.py makemigrations
+$ python manage.py migrate
+```
+
+Finally, it may be more interesting to test the site with some data, so run
+`populate.py` script to generate data:
+
+```
+$ python populate.py -u 20 -g 10 -t 30 -m 500
+```
+
+This script itself have various options, you can see them with help of
+`--help` option. Note that password of every generated user is `user`.
+
+Once the data is generated start development server and go to
+`127.0.0.1:8000` in your browser:
+
+```
+$ python manage.py runserver
+```
+
 ## Features
 
 Here is list of features that should help you understand what is this about.
