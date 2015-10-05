@@ -72,7 +72,7 @@ class Generator():
     """
 
     def __init__(self, model, p_field, p_field_gen, object_gen):
-        self.model = model
+        self.model       = model
         self.p_field     = p_field
         self.p_field_gen = p_field_gen
         self.object_gen  = object_gen
@@ -167,7 +167,7 @@ def populate_topics(count):
                     "Hunky Dory",
                     "Honesty can lead to impotency",
                     "More refuges have been destroyed in South Africa",
-                    "Red Sails (the contest if open!)",
+                    "Red Sails (the contest is open!)",
                     "Previously unknown insects kill people in South Africa",
                     "New kind of nuke bombs has been invented in Russia",
                     "You better think before ridiculing your boss",
