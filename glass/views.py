@@ -137,7 +137,7 @@ def carefully_get_msg(request):
     user = request.user
     if not user.is_authenticated():
         return None
-    msg_id = request.REQUEST.get('msg_id')
+    msg_id = request.GET.get('msg_id')
     if not msg_id:
         return None
     try:
