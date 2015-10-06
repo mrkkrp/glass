@@ -4,3 +4,7 @@ a.anchor {
     top: -70px;
     visibility: hidden;
 }
+
+.like-button {
+    cursor: pointer;
+}
