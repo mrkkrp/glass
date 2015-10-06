@@ -53,7 +53,7 @@ def topic(request, slug):
     """
     topic = get_object_or_404(Topic, slug=slug)
     if request.method == 'GET':
-        pass
+        msg_form = MessageForm()
     elif request.method == 'POST':
         msg_form = MessageForm(request.POST)
         if msg_form.is_valid():
@@ -65,7 +65,7 @@ def topic(request, slug):
 
     messages = Message.objects.filter(topic=topic)
     context = {'topic': topic,
-               'form': MessageForm(),
+               'form': msg_form,
                'messages': messages}
     return render(request, 'glass/topic.html', context)
 
