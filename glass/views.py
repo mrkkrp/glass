@@ -52,21 +52,21 @@ def topic(request, slug):
     and this is reversible.
     """
     topic = get_object_or_404(Topic, slug=slug)
-    if request.method == 'GET':
-        msg_form = MessageForm()
-    elif request.method == 'POST':
+    messages = Message.objects.filter(topic=topic)
+    context = {'topic': topic,
+               'form': MessageForm(),
+               'messages': messages}
+    if request.method == 'POST':
         msg_form = MessageForm(request.POST)
         if msg_form.is_valid():
             message = msg_form.save(commit=False)
             message.author = request.user
-            message.topic  = topic
+            message.topic = topic
             message.save()
             msg_form.save_m2m()
-
-    messages = Message.objects.filter(topic=topic)
-    context = {'topic': topic,
-               'form': msg_form,
-               'messages': messages}
+            return redirect('topic', slug=slug)
+        else:
+            context['form'] = msg_form # render errors
     return render(request, 'glass/topic.html', context)
 
 @login_required

@@ -11,10 +11,12 @@
 {% message message user %}
 {% endfor %}
 
-{% form %}
+{% form '.?next=#bottom' %}
 {% csrf_token %}
 {% generic_fields form %}
 {% generic_button 'Submit' %}
 {% endform %}
+
+<a id="bottom"></a>
 
 {% endblock content %}
