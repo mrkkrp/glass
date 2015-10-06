@@ -1,0 +1,10 @@
+<span data-message-id="{{ message.id }}"
+      data-action="{% url 'msg-like' %}"
+      class="like-it label
+             {% if liked %}
+             label-success
+             {% else %}
+             label-default
+             {% endif %}">
+  {{ message.likes }}
+</span>

@@ -1,0 +1,22 @@
+{% extends 'glass/base.html' %}
+{% load staticfiles %}
+{% load glass_extras %}
+{% block title %}
+{{ topic.title }}
+{% endblock title %}
+
+{% block content %}
+
+{% for message in messages %}
+{% message message user %}
+{% endfor %}
+
+{% comment %}
+{% form 'msg-post' %}
+{% csrf_token %}
+{% generic_fields form %}
+{% generic_button 'Submit' %}
+{% endform %}
+{% endcomment %}
+
+{% endblock content %}

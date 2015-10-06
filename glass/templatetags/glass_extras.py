@@ -49,3 +49,12 @@ def css_class(field, cls):
 @register.filter(name='markdown')
 def render_markdown(value):
     return markdown.markdown(value)
+
+@register.inclusion_tag('message.html',name='message')
+def render_message(message, user):
+    return {'message': message, 'user': user}
+
+@register.inclusion_tag('like-badge.html')
+def like_badge(message,user):
+    liked = message.likers.filter(username=user.username).exists()
+    return {'message': message, 'user': user, 'liked': liked}

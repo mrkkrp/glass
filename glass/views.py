@@ -51,7 +51,23 @@ def topic(request, slug):
     delete last posted message for its author. Messages can be “liked” too
     and this is reversible.
     """
-    return HttpResponse("topic — " + slug)
+    topic = get_object_or_404(Topic, slug=slug)
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        msg_form = MessageForm(request.POST)
+        if msg_form.is_valid():
+            message = msg_form.save(commit=False)
+            message.author = request.user
+            message.topic  = topic
+            message.save()
+            msg_form.save_m2m()
+
+    messages = Message.objects.filter(topic=topic)
+    context = {'topic': topic,
+               'form': MessageForm(),
+               'messages': messages}
+    return render(request, 'glass/topic.html', context)
 
 @login_required
 def new_topic(request):
@@ -129,7 +145,22 @@ def msg_like(request):
 
     Invoked by Java Script from topic page.
     """
-    return HttpResponse("msg like")
+    user = request.user
+    if not user.is_authenticated():
+        return HttpsResponse('0')
+    msg_id = request.GET.get('msg_id')
+    if not msg_id:
+        return HttpsResponse('0')
+    try:
+        msg = Message.objects.get(id=msg_id)
+    except Message.DoesNotExist:
+        return HttpsResponse('0')
+    if msg.likers.filter(username=user.username).exists():
+        msg.likers.remove(user)
+    else:
+        msg.likers.add(user)
+    msg.save()
+    return HttpResponse(str(msg.likes()))
 
 @require_POST
 def msg_edit(request):

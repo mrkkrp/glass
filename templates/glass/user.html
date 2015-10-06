@@ -50,13 +50,19 @@
     {% endif %}
     {% for message in latest_msgs %}
     <tr>
-      <td>{{ message.content|truncatewords:5 }}</td>
+      <td>
+        <a href="{% url 'topic' message.topic.slug %}#{{ message.id }}">
+          {{ message.content|truncatewords:5|markdown|safe }}
+        </a>
+      </td>
       <td>
         <a href="{% url 'topic' message.topic.slug %}">
           {{ message.topic.title }}
         </a>
       </td>
-      <td><span class="badge">{{ message.likes }}</span></td>
+      <td>
+        {% like_badge message user %}
+      </td>
     </tr>
     {% empty %}
     <tr>
