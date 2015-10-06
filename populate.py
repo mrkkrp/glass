@@ -82,9 +82,9 @@ class Generator():
         i = self.model.objects.count()
         while added_total < count:
             j = i if self.p_field == 'id' else str(i)
-            p_field = self.p_field_gen() + j
-            if not self.model.objects.filter(**{self.p_field: p_field}):
-                obj = self.object_gen(p_field)
+            p = self.p_field_gen() + j
+            if not self.model.objects.filter(**{self.p_field: p}).exists():
+                obj = self.object_gen(p)
                 obj.save()
                 added_total += 1
             i += 1
