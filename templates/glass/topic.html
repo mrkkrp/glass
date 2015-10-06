@@ -11,12 +11,10 @@
 {% message message user %}
 {% endfor %}
 
-{% comment %}
-{% form 'msg-post' %}
+{% form %}
 {% csrf_token %}
 {% generic_fields form %}
 {% generic_button 'Submit' %}
 {% endform %}
-{% endcomment %}
 
 {% endblock content %}

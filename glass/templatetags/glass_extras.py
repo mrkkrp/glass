@@ -20,14 +20,13 @@
 from django                   import template
 from django.core.urlresolvers import reverse
 
+import bleach
 import markdown
 
 register = template.Library()
 
 @register.inclusion_tag('form.html')
 def form(action='.'):
-    if action != '.':
-        action = reverse(action)
     return {'action': action}
 
 @register.inclusion_tag('endform.html')
@@ -48,7 +47,8 @@ def css_class(field, cls):
 
 @register.filter(name='markdown')
 def render_markdown(value):
-    return markdown.markdown(value)
+    goodish_tags = ['p','kbd','br'] + bleach.ALLOWED_TAGS
+    return bleach.clean(markdown.markdown(value), tags=goodish_tags)
 
 @register.inclusion_tag('message.html',name='message')
 def render_message(message, user):

@@ -89,6 +89,8 @@ There should be `requirements.txt` for your convenience, by the way.
 
 * Markdown 2.6.2
 
+* Bleach 1.4.2
+
 ## License
 
 Copyright © 2015 Mark Karpov

@@ -129,15 +129,6 @@ def user(request, username):
                 context['form'] = form
     return render(request, 'glass/user.html', context=context)
 
-@require_POST
-def msg_post(request):
-    """
-    Post a message.
-
-    Invoked by Java Script from topic page, causes addition of new message.
-    """
-    return HttpResponse("msg post")
-
 def carefully_get_msg(request):
     """
     Return message according to parameters in ‘request’ or ‘None’. Request
@@ -171,21 +162,6 @@ def msg_like(request):
         msg.likers.add(request.user)
     msg.save()
     return HttpResponse(str(msg.likes()))
-
-@require_POST
-def msg_edit(request):
-    """
-    Edit message.
-
-    Invoked by Java Script from topic page. This essentially replaces old
-    contents by new contents. We could have history of edits, but it seems
-    like an overcomplication for now.
-    """
-    msg = carefully_get_msg(request)
-    if not msg or not msg.editable_by(request.user):
-        return HttpResponse('')
-    # msg.delete()
-    return HttpResponse("deleted")
 
 @require_GET
 def msg_del(request):
