@@ -91,6 +91,14 @@ There should be `requirements.txt` for your convenience, by the way.
 
 * Bleach 1.4.2
 
+## TODO List
+
+* Allow users edit already existing messages (staff can edit everything, but
+  normally only last message in thread can be edited and only by its
+  author).
+
+* Allow users create tags.
+
 ## License
 
 Copyright © 2015 Mark Karpov
