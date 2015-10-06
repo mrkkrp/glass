@@ -22,22 +22,23 @@ from django.contrib.auth.models     import User
 from django.template.defaultfilters import slugify
 
 class Tag(models.Model):
+
     name = models.CharField(max_length=16, primary_key=True)
 
     def __str__(self):
         return self.name
 
 class Topic(models.Model):
+
     title = models.CharField(max_length=128)
     slug  = models.SlugField(unique=True)
     tags  = models.ManyToManyField(Tag)
 
-    def likes(self):
+    def initial_message(self):
         """
-        Return number of people who like this topic. This is currently equal to
-        number of people who like its introductory message.
+        Return first message in the topic.
         """
-        return Message.objects.filter(topic=self)[0].likes()
+        return Message.objects.filter(topic=self)[0]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -47,6 +48,7 @@ class Topic(models.Model):
         return self.slug
 
 class Message(models.Model):
+
     author   = models.ForeignKey(User)
     topic    = models.ForeignKey(Topic)
     content  = models.TextField("Your message")
@@ -60,8 +62,24 @@ class Message(models.Model):
         """
         return self.likers.count()
 
+    def editable_by(self, user):
+        """
+        Can ‘user’ delete/edit this message?
+        """
+        last_in_topic = not Message.objects.filter(
+            topic=self.topic,
+            id__gt=self.id).exists()
+        self_editing = last_in_topic and self.author == user
+        return self_editing or user.is_staff
+
+    def modified_later(self):
+        """
+        Check if modification time is greater than creation time.
+        """
+        return self.modified > self.created
+
     def __str__(self):
         return str(self.id) + ' by ' + self.author.username
 
     class Meta:
-        ordering = ['created']
+        ordering = ['id']

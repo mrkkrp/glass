@@ -52,7 +52,8 @@ def render_markdown(value):
 
 @register.inclusion_tag('message.html',name='message')
 def render_message(message, user):
-    return {'message': message, 'user': user}
+    editable = message.editable_by(user)
+    return {'message': message, 'user': user, 'editable': editable}
 
 @register.inclusion_tag('like-badge.html')
 def like_badge(message,user):

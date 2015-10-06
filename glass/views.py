@@ -116,7 +116,7 @@ def user(request, username):
     the user.
     """
     user = get_object_or_404(User, username=username)
-    latest_msgs = Message.objects.filter(author=user).order_by('-created')[:5]
+    latest_msgs = Message.objects.filter(author=user).order_by('-id')[:5]
     context = {'this_user': user, 'latest_msgs': latest_msgs}
     if request.user == user:
         if request.method == 'GET':
@@ -138,6 +138,23 @@ def msg_post(request):
     """
     return HttpResponse("msg post")
 
+def carefully_get_msg(request):
+    """
+    Return message according to parameters in ‘request’ or ‘None’. Request
+    should contain parameter named ‘msg_id’ identifying the message.
+    """
+    user = request.user
+    if not user.is_authenticated():
+        return None
+    msg_id = request.REQUEST.get('msg_id')
+    if not msg_id:
+        return None
+    try:
+        msg = Message.objects.get(id=msg_id)
+    except Message.DoesNotExist:
+        return None
+    return msg
+
 @require_GET
 def msg_like(request):
     """
@@ -145,20 +162,13 @@ def msg_like(request):
 
     Invoked by Java Script from topic page.
     """
-    user = request.user
-    if not user.is_authenticated():
-        return HttpsResponse('0')
-    msg_id = request.GET.get('msg_id')
-    if not msg_id:
-        return HttpsResponse('0')
-    try:
-        msg = Message.objects.get(id=msg_id)
-    except Message.DoesNotExist:
-        return HttpsResponse('0')
-    if msg.likers.filter(username=user.username).exists():
-        msg.likers.remove(user)
+    msg = carefully_get_msg(request)
+    if not msg:
+        return HttpResponse('0')
+    if msg.likers.filter(username=request.user.username).exists():
+        msg.likers.remove(request.user)
     else:
-        msg.likers.add(user)
+        msg.likers.add(request.user)
     msg.save()
     return HttpResponse(str(msg.likes()))
 
@@ -171,7 +181,11 @@ def msg_edit(request):
     contents by new contents. We could have history of edits, but it seems
     like an overcomplication for now.
     """
-    return HttpResponse("msg edit")
+    msg = carefully_get_msg(request)
+    if not msg or not msg.editable_by(request.user):
+        return HttpResponse('')
+    # msg.delete()
+    return HttpResponse("deleted")
 
 @require_GET
 def msg_del(request):
@@ -181,4 +195,8 @@ def msg_del(request):
     Quite trivially, it deletes messages. Only last message in thread can be
     deleted and only by its author.
     """
-    return HttpResponse("msg del")
+    msg = carefully_get_msg(request)
+    if not msg or not msg.editable_by(request.user):
+        return HttpResponse('')
+    msg.delete()
+    return HttpResponse("deleted")

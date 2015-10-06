@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load glass_extras %}
 
-<div class="panel panel-info">
+<div class="panel panel-info" id="body-of-{{ message.id }}">
   <div class="panel-heading">
     <a class="anchor" id="{{ message.id }}"></a>
     <h3 class="panel-title anchor">
@@ -12,6 +12,9 @@
       <a href="{% url 'topic' message.topic.slug %}#{{ message.id }}">
         {{ message.created|naturalday }}
       </a>
+      {% if message.modified_later %}
+      (modified {{ message.modified|naturalday }})
+      {% endif %}
       {% if user.is_authenticated %}
       <div class="pull-right">
         {% like_badge message user %}
@@ -19,8 +22,23 @@
       {% endif %}
     </h3>
   </div>
-<div class="panel-body">
-  {{ message.content|markdown|safe }}
-</div>
-{# <div class="panel-footer">Panel footer</div> #}
+  <div class="panel-body">
+    {{ message.content|markdown|safe }}
+  </div>
+  {% if editable %}
+  <div class="panel-footer">
+    <a class="edit-button"
+       data-message-id="{{ message.id }}"
+       data-action="{% url 'msg-edit' %}"
+       href="javascript:;">
+      edit
+    </a>
+    <a class="delete-button"
+       data-message-id="{{ message.id }}"
+       data-action="{% url 'msg-del' %}"
+       href="javascript:;">
+      delete
+    </a>
+  </div>
+  {% endif %}
 </div>
