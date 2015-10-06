@@ -5,6 +5,10 @@
 {{ topic.title }}
 {% endblock title %}
 
+{% block title_stuff %}
+{% tags_of topic %}
+{% endblock title_stuff %}
+
 {% block content %}
 
 {% for message in messages %}

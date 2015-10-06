@@ -19,6 +19,7 @@
 
 from django                   import template
 from django.core.urlresolvers import reverse
+from glass.models             import Tag
 
 import bleach
 import markdown
@@ -50,12 +51,17 @@ def render_markdown(value):
     goodish_tags = ['p','kbd','br'] + bleach.ALLOWED_TAGS
     return bleach.clean(markdown.markdown(value), tags=goodish_tags)
 
-@register.inclusion_tag('message.html',name='message')
+@register.inclusion_tag('message.html', name='message')
 def render_message(message, user):
     editable = message.editable_by(user)
     return {'message': message, 'user': user, 'editable': editable}
 
 @register.inclusion_tag('like-badge.html')
-def like_badge(message,user):
+def like_badge(message, user):
     liked = message.likers.filter(username=user.username).exists()
     return {'message': message, 'user': user, 'liked': liked}
+
+@register.inclusion_tag('tags.html', name='tags_of')
+def render_tags(topic):
+    tags = Tag.objects.filter(topic=topic)
+    return {'tags': tags}

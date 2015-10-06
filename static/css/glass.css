@@ -8,3 +8,7 @@ a.anchor {
 .like-button {
     cursor: pointer;
 }
+
+.tag:hover, .tag:active {
+    text-decoration: none;
+}

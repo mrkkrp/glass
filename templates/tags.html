@@ -1,0 +1,8 @@
+{% for tag in tags %}
+<a href="{% url 'index' %}?tag={{ tag.name }}" class="tag">
+  <span class="label label-info tag" title="See similar topics">
+    {{ tag.name }}
+  </span>
+</a>
+&nbsp;
+{% endfor %}
