@@ -62,6 +62,6 @@ def like_badge(message, user):
     return {'message': message, 'user': user, 'liked': liked}
 
 @register.inclusion_tag('tags.html', name='tags_of')
-def render_tags(topic):
-    tags = Tag.objects.filter(topic=topic)
+def render_tags(topic=None):
+    tags = Tag.objects.filter(topic=topic) if topic else Tag.objects.all()
     return {'tags': tags}
