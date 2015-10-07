@@ -97,17 +97,18 @@ def topic(request, slug):
     context = {'topic': topic,
                'form': MessageForm(),
                'messages': messages}
-    if request.method == 'POST':
-        msg_form = MessageForm(request.POST)
-        if msg_form.is_valid():
-            message = msg_form.save(commit=False)
-            message.author = request.user
-            message.topic = topic
-            message.save()
-            msg_form.save_m2m()
-            return redirect('topic', slug=slug)
-        else:
-            context['form'] = msg_form # render errors
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            msg_form = MessageForm(request.POST)
+            if msg_form.is_valid():
+                message = msg_form.save(commit=False)
+                message.author = request.user
+                message.topic = topic
+                message.save()
+                msg_form.save_m2m()
+                return redirect('topic', slug=slug)
+            else:
+                context['form'] = msg_form # render errors
     return render(request, 'glass/topic.html', context)
 
 @login_required

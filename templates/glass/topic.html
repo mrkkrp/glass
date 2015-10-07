@@ -15,11 +15,13 @@
 {% message message user %}
 {% endfor %}
 
+{% if user.is_authenticated %}
 {% form '.?next=#bottom' %}
 {% csrf_token %}
 {% generic_fields form %}
 {% generic_button 'Submit' %}
 {% endform %}
+{% endif %}
 
 <a id="bottom"></a>
 
