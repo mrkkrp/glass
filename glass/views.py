@@ -18,6 +18,7 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator          import Paginator, EmptyPage, PageNotAnInteger
 from django.http                    import HttpResponse
 from django.shortcuts               import render, redirect, get_object_or_404
 from django.views.decorators.http   import require_GET, require_POST
@@ -25,6 +26,7 @@ from django.views.decorators.http   import require_GET, require_POST
 from glass.forms  import UserForm, TopicForm, MessageForm
 from glass.models import User, Tag, Topic, Message
 
+@require_GET
 def index(request):
     """
     Index page of the project.
@@ -33,7 +35,46 @@ def index(request):
     “likes”. Main feature on the page is “live” search that has a number of
     parameters, and uses AJAX.
     """
-    return render(request, 'glass/index.html')
+    page_size = request.GET.get('page_size', 5)
+    page      = request.GET.get('page', 1)
+    tag       = request.GET.get('tag')
+    search    = request.GET.get('search')
+    tm        = Topic.objects
+    topics    = tm.filter(tags__in=[tag]) if tag else tm.all()
+    if search:
+        topics = topics.filter(title__contains=search)
+    # FIXME The following processing logic assumes that relatively small
+    # (maybe a few hundreds) number of topics is returned by ‘topic’ query
+    # set. This may be *quite* slow if the data base contains lots of
+    # topics. If this is the case, we could add ‘initial_message’ foreign
+    # key field to ‘Topic’ model and use it to sort topics on data base
+    # level. Other solutions would involve lower level of interaction with
+    # the data base and thus may lock the application into using of
+    # particular back-end, which is often bad design.
+    topics = sorted(list(topics),
+                    key=lambda x: x.initial_message().likes(),
+                    reverse=True)
+    # ↑ Who could believe that Python copies so much of Lisp…
+    context = {}
+    if topics:
+        paginator = Paginator(topics, page_size)
+        num_pages = paginator.num_pages
+        try:
+            p = paginator.page(page)
+        except PageNotAnInteger:
+            contacts = paginator.page(1)
+        except EmptyPage:
+            p = paginator.page(num_pages)
+        context['page'] = p
+        # Range of page links to show, we should take care of situations
+        # when there are too many pages:
+        page_range = range(max(1, p.number - 4),
+                           min(num_pages, p.number + 4) + 1)
+        context['page_range'] = page_range
+        context['num_pages'] = num_pages
+    else:
+        context['page'] = None
+    return render(request, 'glass/index.html', context=context)
 
 def about(request):
     """
@@ -172,7 +213,11 @@ def msg_del(request):
     deleted and only by its author.
     """
     msg = carefully_get_msg(request)
+    topic = msg.topic
     if not msg or not msg.editable_by(request.user):
         return HttpResponse('')
     msg.delete()
+    # if this is the single message in topic, delete topic:
+    if not Message.objects.filter(topic=topic).exists():
+        topic.delete()
     return HttpResponse("deleted")
