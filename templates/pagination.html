@@ -1,0 +1,61 @@
+{% load glass_extras %}
+
+{% if page.has_other_pages %}
+<div class="row">
+  <div class="col-md-8">
+    <nav>
+      <ul class="pagination">
+        {% if page.has_previous %}
+        <li>
+          <a href="{% with_get_param 'page' page.previous_page_number %}"
+             aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if 1 not in page_range %}
+        <li>
+          <a href="{% with_get_param 'page' 1 %}">
+            1
+          </a>
+        </li>
+        {% if 2 not in page_range %}
+        <li><a href="#">&hellip;</a></li>
+        {% endif %}
+        {% endif %}
+
+        {% for p in page_range %}
+        <li
+          {% if p == page.number %}
+          class="active"
+          {% endif %}
+          >
+          <a href="{% with_get_param 'page' p %}">{{ p }}</a>
+        </li>
+        {% endfor %}
+
+        {% if num_pages not in page_range %}
+        {% if num_pages|add:"-1" not in page_range %}
+        <li><a href="#">&hellip;</a></li>
+        {% endif %}
+        <li>
+          <a href="{% with_get_param 'page' num_pages %}">
+            {{ num_pages }}
+          </a>
+        </li>
+        {% endif %}
+
+        {% if page.has_next %}
+        <li>
+          <a href="{% with_get_param 'page' page.next_page_number %}"
+             aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+{% endif %}

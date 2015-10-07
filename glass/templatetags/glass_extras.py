@@ -65,3 +65,26 @@ def like_badge(message, user):
 def render_tags(topic=None):
     tags = Tag.objects.filter(topic=topic) if topic else Tag.objects.all()
     return {'tags': tags}
+
+@register.simple_tag(takes_context=True)
+def with_get_param(context, param, value):
+    """
+    Add given GET parameter to existing parameters of the page, overwriting
+    value of ‘param’ if it already exists.
+    """
+    request = context['request']
+    params  = request.GET.copy()
+    params[param] = value
+    return '?{}'.format(params.urlencode())
+
+@register.inclusion_tag('pagination.html',
+                        name='pagination',
+                        takes_context=True)
+def render_paginaiton(context):
+    """
+    Render selection for pagination. Hairy stuff abstracted.
+
+    Note the this tag requires 'page', 'page_range', and 'num_pages' items
+    be defined in request context.
+    """
+    return context
