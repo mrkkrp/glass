@@ -34,7 +34,7 @@ Finally, it may be more interesting to test the site with some data, so run
 $ python populate.py -u 20 -g 10 -t 30 -m 500
 ```
 
-This script itself have various options, you can see them with help of
+The script itself has various options, you can see them with help of
 `--help` option. Note that password of every generated user is `user`.
 
 Once the data is generated start development server and go to
