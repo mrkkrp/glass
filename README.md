@@ -91,6 +91,8 @@ There should be `requirements.txt` for your convenience, by the way.
 
 ## TODO List
 
+* Allow selection of page size on main page.
+
 * Allow users edit already existing messages (staff can edit everything, but
   normally only last message in thread can be edited and only by its
   author).
