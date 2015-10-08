@@ -12,3 +12,7 @@ a.anchor {
 .tag:hover, .tag:active {
     text-decoration: none;
 }
+
+blockquote {
+    font-size: 14px;
+}
