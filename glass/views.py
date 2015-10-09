@@ -86,11 +86,10 @@ def topic(request, slug):
     """
     Topic-dedicated page.
 
-    This displays all messages in order (obviously sorted by date or
-    creation) and allows registered users to post new messages. This page
-    features pagination, anchor links per message, and ability to edit or
-    delete last posted message for its author. Messages can be “liked” too
-    and this is reversible.
+    This displays all messages in order and allows registered users to post
+    new messages. This page features anchor links per message and ability to
+    edit or delete last posted message for its author. Messages can be
+    “liked” too and this is reversible.
     """
     topic = get_object_or_404(Topic, slug=slug)
     messages = Message.objects.filter(topic=topic)
@@ -120,11 +119,11 @@ def new_topic(request):
     every topic must have initial message.
     """
     if request.method == 'GET':
-        context = {'topic_form': TopicForm(prefix='topic_'),
-                   'msg_form':   MessageForm(prefix='msg_')}
+        context = {'topic_form': TopicForm(prefix='topic'),
+                   'msg_form':   MessageForm(prefix='msg')}
     elif request.method == 'POST':
-        topic_form = TopicForm(request.POST, prefix='topic_')
-        msg_form = MessageForm(request.POST, prefix='msg_')
+        topic_form = TopicForm(request.POST, prefix='topic')
+        msg_form = MessageForm(request.POST, prefix='msg')
         context = {'topic_form': topic_form,
                    'msg_form':   msg_form}
         if topic_form.is_valid():
@@ -137,16 +136,6 @@ def new_topic(request):
                 msg_form.save_m2m()
                 return redirect('topic', slug=new_topic.slug)
     return render(request, 'glass/new-topic.html', context=context)
-
-@require_GET
-def get_topic(request):
-    """
-    Used to interactively retrieve topics of interest.
-
-    Parameters for the search are sent as GET parameters, the whole thing is
-    currently done from the index (main) page.
-    """
-    return HttpResponse("get topic")
 
 @login_required
 def user(request, username):
@@ -210,8 +199,8 @@ def msg_del(request):
     """
     Deletion of message.
 
-    Quite trivially, it deletes messages. Only last message in thread can be
-    deleted and only by its author.
+    Quite obviously, it deletes messages. Only last message in thread can be
+    deleted and only by its author. Staff can delete everything, of course.
     """
     msg = carefully_get_msg(request)
     topic = msg.topic
