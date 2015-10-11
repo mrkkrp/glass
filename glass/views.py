@@ -32,8 +32,7 @@ def index(request):
     Index page of the project.
 
     The page presents list of popular topics ordered by default by number of
-    “likes”. Main feature on the page is “live” search that has a number of
-    parameters, and uses AJAX.
+    “likes”. Pagination, search.
     """
     page_size = request.GET.get('page_size', 5)
     page      = request.GET.get('page', 1)
@@ -54,7 +53,6 @@ def index(request):
     topics = sorted(list(topics),
                     key=lambda x: x.initial_message().likes(),
                     reverse=True)
-    # ↑ Who could believe that Python copies so much of Lisp…
     context = {}
     if topics:
         paginator = Paginator(topics, page_size)

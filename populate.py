@@ -106,8 +106,8 @@ def random_objects(model, count_min, count_max):
     I expect this to be inefficient when there are lots of objects of that
     type. Don't use this for anything serious.
     """
-    objects = list(model.objects.all())
-    total   = model.objects.count()
+    objects   = list(model.objects.all())
+    total     = model.objects.count()
     count_min = min(count_min, total)
     count_max = min(count_max, total)
     random.shuffle(objects) # ← this may perform quite poorly
@@ -116,8 +116,10 @@ def random_objects(model, count_min, count_max):
 def populate_users(count):
     """
     Create ‘count’ new users in database. Names of users are unique, they
-    are combination of human-readable string and a number. First name and
-    last name are omitted and email is always “foo@example.org”.
+    are combination of human-readable string and a number. First name is
+    generated from username (by omission of numeric part), last name is
+    always “Smith”, and email is always “foo@example.org”. Password for
+    every generated account is “user”.
     """
     USER_NAMES = ['nina','rick','dick','brown','mary','anna','antonio','boba',
                   'michael','rosa','alex','bruno','alfred','nikolay','ivan',
@@ -138,8 +140,8 @@ def populate_tags(count):
     Create ‘count’ new tags in database. Names of tags are unique, they are
     combination of human-readable string and a number.
     """
-    TAGS = ['news','music','politics','nonsense','hacking','fucking',
-            'racking','health','in-pictures']
+    TAGS = ['news','music','politics','nonsense','hacking','math','fun',
+            'racking','health','in-pictures','hot']
 
     def gen_tag(name):
         tag = Tag(name=name)
@@ -165,18 +167,19 @@ def populate_topics(count):
                     "Infection in South Africa",
                     "Love cannot bear",
                     "Hunky Dory",
-                    "Honesty can lead to impotency",
+                    "For how long will it be like this?",
                     "More refuges have been destroyed in South Africa",
                     "Red Sails (the contest is open!)",
                     "Previously unknown insects kill people in South Africa",
-                    "New kind of nuke bombs has been invented in Russia",
+                    "People in Russia don't speak Russian anymore",
                     "You better think before ridiculing your boss",
                     "Ultrasonic vibrations can increase",
-                    "It has grown much bigger than I hoped!",]
+                    "It has grown much bigger than I hoped!",
+    ]
 
     def gen_topic(title):
-        topic       = Topic(title=title)
-        topic.save() # for many-to-many relations
+        topic = Topic(title=title)
+        topic.save() # for many-to-many relations we need existing object
         topic.tags = random_objects(Tag, 1, 3)
         return topic
 
@@ -189,7 +192,7 @@ def populate_messages(count):
     Create ‘count’ new messages in database. Random author from existing
     users is assigned to every message as well as random topic. Content is
     pretty stupid right now. There may be a few “likers” from existing
-    users.
+    users (up to 10).
     """
     MESSAGE = ["Cannot imagine this topic is interesting.",
                "I don't wanna die, so let's address this while we can!",
@@ -200,8 +203,11 @@ def populate_messages(count):
                "Is that a joke?",
                "This makes me choke.",
                "Oh, that's one big mess.",
+               "Thoughtful analysis shows **it can be much worse**!",
                "I've never been to South Africa, but it seems it's hard to live there.",
-               "Press <kbd>Ctrl+4</kbd> and you're done!",]
+               "Press <kbd>Ctrl+F4</kbd> and you're done!",
+               "I can't help it, I need to post a message here!",
+]
 
     def gen_message(pk):
         message = Message(id=pk)
@@ -223,10 +229,10 @@ def with_comments(fnc, count, what):
 
     No action is performed if ‘count’ is not a positive number.
     """
-    if count > 0:
-        print("Creating {} {}…".format(count, what))
-        fnc(count)
-        print("Done: {} {} created.".format(count, what))
+    if count <= 0: return
+    print("Creating {} {}…".format(count, what))
+    fnc(count)
+    print("Done: {} {} created.".format(count, what))
 
 if __name__ == '__main__':
     args = parser.parse_args()
